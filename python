@@ -1,0 +1,154 @@
+import tkinter as tk 
+from tkinter import ttk, messagebox 
+def login(): 
+username = username_entry.get() 
+password = password_entry.get() 
+# Add actual login authentication logic here 
+if username == "admin" and password == "password": 
+messagebox.showinfo("Login Successful", "Welcome, Admin!") 
+open_main_window() 
+else: 
+messagebox.showerror("Login Failed", "Invalid username or password") 
+def open_main_window(): 
+main_window = tk.Tk() 
+main_window.title("Airline Reservation System") 
+main_window.geometry("800x600") 
+style = ttk.Style() 
+style.configure("TButton", font=("Arial", 10)) 
+style.configure("TRadiobutton", font=("Arial", 10)) 
+def search_flights(): 
+# Mockup flight data (replace this with actual flight data retrieval logic) 
+flights = [ 
+{"Flight Number": "123", "Origin": "New York", "Destination": "Los Angeles", "Departure Time": 
+"08:00 AM", "Price": "$500"}, 
+{"Flight Number": "456", "Origin": "Chicago", "Destination": "San Francisco", "Departure Time": 
+"10:00 AM", "Price": "$450"}, 
+{"Flight Number": "789", "Origin": "Los Angeles", "Destination": "New York", "Departure Time": 
+"12:00 PM", "Price": "$550"}, 
+{"Flight Number": "101", "Origin": "London", "Destination": "Paris", "Departure Time": "09:30 
+AM", 
+"Price": "£400"}, 
+{"Flight Number": "202", "Origin": "Tokyo", "Destination": "Sydney", "Departure Time": "11:45 
+AM", 
+"Price": "¥55000"}, 
+{"Flight Number": "303", "Origin": "Toronto", "Destination": "Mexico City", "Departure Time": 
+"01:20 
+PM", "Price": "$600"}, 
+{"Flight Number": "404", "Origin": "Berlin", "Destination": "Rome", "Departure Time": "03:00 
+PM", 
+"Price": "€350"}, 
+{"Flight Number": "505", "Origin": "Moscow", "Destination": "Beijing", "Departure Time": "05:15 
+PM", 
+"Price": "₽12000"}, 
+{"Flight Number": "606", "Origin": "Cairo", "Destination": "Dubai", "Departure Time": "07:30 
+PM", 
+"Price": "EGP2000"}, 
+{"Flight Number": "707", "Origin": "Sydney", "Destination": "Singapore", "Departure Time": 
+"10:00 
+PM", "Price": "AUD750"}, 
+{"Flight Number": "808", "Origin": "Rio de Janeiro", "Destination": "Buenos Aires", "Departure 
+26 
+Time": "11:45 PM", "Price": "$450"}, 
+{"Flight Number": "909", "Origin": "Mumbai", "Destination": "Bangkok", "Departure Time": 
+"02:30 AM", 
+"Price": "₹8500"}, 
+] 
+for i, flight in enumerate(flights): 
+for j, (key, value) in enumerate(flight.items()): 
+ttk.Label(table_frame, text=value, font=("Arial", 10)).grid(row=i+1, column=j, padx=5, pady=2, 
+sticky="w") 
+ttk.Button(table_frame, text="Book", command=lambda flight=flight: book_flight(flight), 
+style="TButton").grid(row=i+1, 
+column=len(flight)+1, 
+book_flight(flight): 
+padx=5, 
+pady=2, 
+sticky="w")def 
+confirmation = messagebox.askyesno("Confirmation", f"Book flight {flight['Flight Number']} from 
+{flight['Origin']} to {flight['Destination']}?\n\nPrice: {flight['Price']}") 
+if confirmation: 
+select_meal_window(flight) 
+def select_meal_window(flight): 
+meal_options = ["No Meal", "Vegetarian", "Non-Vegetarian", "Vegan"] 
+meal_selection_window = tk.Toplevel(main_window) 
+meal_selection_window.title("Select Meal") 
+ttk.Label(meal_selection_window, text="Select Meal:", font=("Arial", 12)).pack(pady=5) 
+meal_var = tk.StringVar() 
+meal_var.set(meal_options[0]) 
+for meal in meal_options: 
+ttk.Radiobutton(meal_selection_window, text=meal, variable=meal_var, value=meal, 
+style="TRadiobutton").pack(pady=2) 
+ttk.Button(meal_selection_window, text="Confirm", command=lambda: payment_window(flight, 
+meal_var.get(), meal_selection_window), style="TButton").pack(pady=10) 
+def payment_window(flight, selected_meal, meal_selection_window): 
+meal_selection_window.destroy() 
+amount_to_pay = int(flight["Price"][1:]) 
+payment_window = tk.Toplevel(main_window) 
+payment_window.title("Payment") 
+ttk.Label(payment_window, text=f"Amount to Pay: {flight['Price']}", font=("Arial", 
+12)).pack(pady=10) 
+ttk.Label(payment_window, 
+10)).pack(pady=5) 
+def validate_card_number(): 
+text="Enter 
+card_number = card_number_entry.get() 
+Card 
+if len(card_number) == 16 and card_number.isdigit(): 
+Number (16 digits):", font=("Arial", 
+process_payment(amount_to_pay, card_number, payment_window) 
+else: 
+messagebox.showerror("Invalid Card Number", "Please enter a valid 16-digit card number.") 
+card_number_entry = ttk.Entry(payment_window, font=("Arial", 10)) 
+card_number_entry.pack(pady=5) 
+ttk.Button(payment_window, text="Submit", command=validate_card_number, 
+style="TButton").pack(pady=10) 
+def process_payment(amount, card_number, payment_window): 
+payment_window.destroy() 
+# Create a payment confirmation window with a treeview 
+confirmation_window = tk.Toplevel() 
+confirmation_window.title("Payment Confirmation") 
+27 
+# Create a Treeview widget 
+tree = ttk.Treeview(confirmation_window, columns=("Description", "Value"), show="headings") 
+tree.heading("Description", text="Description") 
+tree.heading("Value", text="Value") 
+tree.pack(pady=10) 
+# Add items to the tree 
+tree.insert("", "end", values=("Amount Paid", f"${amount}")) 
+tree.insert("", "end", values=("Card Number", card_number)) 
+tree.insert("", 
+"end", 
+values=("Status", 
+"Successful"))ttk.Button(confirmation_window, 
+text="Close", command=confirmation_window.destroy, 
+style="TButton").pack(pady=10) 
+style = ttk.Style() 
+style.configure("TButton", font=("Arial", 10)) 
+style.configure("TButton", font=("Arial", 10)) 
+style.configure("TRadiobutton", font=("Arial", 10)) 
+search_button = ttk.Button(main_window, text="Search Flights", command=search_flights, 
+style="TButton") 
+search_button.pack(pady=10) 
+table_frame = ttk.Frame(main_window) 
+table_frame.pack(pady=10) 
+headers = ["Flight Number", "Origin", "Destination", "Departure Time", "Price", ""] 
+for i, header in enumerate(headers): 
+ttk.Label(table_frame, text=header, font=('Arial', 12, 'bold')).grid(row=0, column=i, padx=5, 
+pady=2, sticky="w") 
+main_window.mainloop() 
+# Create the login window 
+login_window = tk.Tk() 
+login_window.title("Login") 
+login_window.geometry("300x200") 
+ttk.Label(login_window, text="Username:", font=("Arial", 12)).pack(pady=5) 
+username_entry = ttk.Entry(login_window, font=("Arial", 10)) 
+username_entry.pack(pady=5) 
+ttk.Label(login_window, text="Password:", font=("Arial", 12)).pack(pady=5) 
+password_entry = ttk.Entry(login_window, show="*", font=("Arial", 10)) 
+password_entry.pack(pady=5) 
+login_button = ttk.Button(login_window, text="Login", command=login, style="TButton") 
+login_button.pack(pady=10) 
+# Set the background color to orange 
+background_color = "#FFA500" 
+login_window.configure(background=background_color) 
+login_window.mainloop()
